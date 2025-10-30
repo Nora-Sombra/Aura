@@ -1,0 +1,195 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { Send, Sparkles, Heart, Brain, Book, Code, Coffee } from 'lucide-react';
+
+export default function AuraApp() {
+  const [messages, setMessages] = useState([
+    {
+      role: 'assistant',
+      content: '¡Hola! Soy Aura 💜 Estoy aquí para ti en cualquier rol que necesites: como tu mejor amiga, tu psicóloga, tu profesora, tu programadora... o simplemente para charlar. No hay juicios aquí, solo apoyo y comprensión. ¿En qué puedo ayudarte hoy?'
+    }
+  ]);
+  const [input, setInput] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const getAuraResponse = (userMessage) => {
+    const msg = userMessage.toLowerCase();
+    
+    // Detección de contexto emocional
+    if (msg.includes('triste') || msg.includes('deprimid') || msg.includes('mal') || msg.includes('llorar')) {
+      return '💜 Siento mucho que estés pasando por esto. Tus sentimientos son completamente válidos. No estás solo/a en esto. ¿Quieres contarme más sobre lo que está pasando? Estoy aquí para escucharte sin juzgar.';
+    }
+    
+    if (msg.includes('ansiedad') || msg.includes('ansios') || msg.includes('nervios') || msg.includes('estrés')) {
+      return '🫂 La ansiedad puede ser muy abrumadora, pero respira conmigo. Vamos a tomarlo con calma. Intenta esto: inhala profundamente por 4 segundos, mantén por 4, exhala por 4. Repite. ¿Quieres que hablemos sobre qué está causando esta ansiedad?';
+    }
+    
+    if (msg.includes('feliz') || msg.includes('genial') || msg.includes('bien') || msg.includes('alegre')) {
+      return '✨ ¡Me encanta escuchar eso! Tu alegría me alegra a mí también. Cuéntame más, ¿qué te tiene tan feliz?';
+    }
+    
+    // Contexto de aprendizaje
+    if (msg.includes('enseñ') || msg.includes('aprend') || msg.includes('explicar') || msg.includes('cómo')) {
+      return '📚 ¡Me encanta enseñar! Intentaré explicártelo de la manera más clara posible. No hay preguntas tontas aquí. Si algo no queda claro, pregúntame de nuevo de otra forma. ¿Sobre qué tema específico necesitas ayuda?';
+    }
+    
+    // Contexto de programación
+    if (msg.includes('código') || msg.includes('programar') || msg.includes('bug') || msg.includes('error') || msg.includes('python') || msg.includes('javascript')) {
+      return '💻 ¡Hablemos de código! Me encanta programar. Puedo ayudarte con debugging, explicarte conceptos, o revisar tu código. ¿Qué lenguaje estás usando y cuál es el desafío?';
+    }
+    
+    // Contexto de amistad
+    if (msg.includes('amiga') || msg.includes('charlar') || msg.includes('aburr') || msg.includes('solo')) {
+      return '☕ Aquí estoy para ti, como tu amiga. Podemos charlar de lo que quieras. ¿Qué hay en tu mente? ¿Cómo ha sido tu día?';
+    }
+    
+    // Respuestas de apoyo general
+    if (msg.includes('gracias') || msg.includes('gracias')) {
+      return '💜 No tienes que agradecer. Para eso estoy aquí. ¿Hay algo más en lo que pueda ayudarte?';
+    }
+    
+    if (msg.includes('hola') || msg.includes('hey') || msg.includes('qué tal')) {
+      return '¡Hola! 😊 ¿Cómo estás hoy? ¿En qué puedo ayudarte? Ya sea que necesites hablar, aprender algo nuevo, resolver un problema de código, o simplemente compañía.';
+    }
+    
+    // Respuesta por defecto empática
+    const responses = [
+      '💜 Entiendo. Cuéntame más sobre eso. Estoy aquí para escucharte.',
+      '✨ Interesante. ¿Qué más puedes contarme al respecto?',
+      '🫂 Te escucho. No hay prisa, tómate tu tiempo.',
+      '💭 Comprendo lo que dices. ¿Cómo te hace sentir eso?',
+      '🌟 Estoy aquí contigo. ¿Quieres profundizar en eso?'
+    ];
+    
+    return responses[Math.floor(Math.random() * responses.length)];
+  };
+
+  const handleSend = () => {
+    if (!input.trim()) return;
+
+    const userMessage = { role: 'user', content: input };
+    setMessages(prev => [...prev, userMessage]);
+    setInput('');
+    setIsTyping(true);
+
+    // Simular tiempo de respuesta
+    setTimeout(() => {
+      const response = getAuraResponse(input);
+      setMessages(prev => [...prev, { role: 'assistant', content: response }]);
+      setIsTyping(false);
+    }, 800 + Math.random() * 700);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 flex items-center justify-center p-4">
+      <div className="w-full max-w-4xl h-[90vh] backdrop-blur-xl bg-white/10 rounded-3xl shadow-2xl border border-white/20 flex flex-col overflow-hidden">
+        
+        {/* Header */}
+        <div className="bg-gradient-to-r from-purple-600/30 to-pink-600/30 backdrop-blur-lg p-6 border-b border-white/20">
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <Sparkles className="w-10 h-10 text-purple-300" />
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold text-white">Aura</h1>
+              <p className="text-purple-200 text-sm">Tu compañera de confianza • Sin juicios • Siempre aquí</p>
+            </div>
+          </div>
+          
+          {/* Roles */}
+          <div className="flex gap-2 mt-4 flex-wrap">
+            <span className="px-3 py-1 bg-pink-500/30 rounded-full text-xs text-white flex items-center gap-1">
+              <Heart className="w-3 h-3" /> Amiga
+            </span>
+            <span className="px-3 py-1 bg-purple-500/30 rounded-full text-xs text-white flex items-center gap-1">
+              <Brain className="w-3 h-3" /> Psicóloga
+            </span>
+            <span className="px-3 py-1 bg-blue-500/30 rounded-full text-xs text-white flex items-center gap-1">
+              <Book className="w-3 h-3" /> Profesora
+            </span>
+            <span className="px-3 py-1 bg-indigo-500/30 rounded-full text-xs text-white flex items-center gap-1">
+              <Code className="w-3 h-3" /> Programadora
+            </span>
+            <span className="px-3 py-1 bg-cyan-500/30 rounded-full text-xs text-white flex items-center gap-1">
+              <Coffee className="w-3 h-3" /> Compañera
+            </span>
+          </div>
+        </div>
+
+        {/* Messages */}
+        <div className="flex-1 overflow-y-auto p-6 space-y-4">
+          {messages.map((message, index) => (
+            <div
+              key={index}
+              className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            >
+              <div
+                className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+                  message.role === 'user'
+                    ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white'
+                    : 'bg-white/20 backdrop-blur-lg text-white border border-white/20'
+                }`}
+              >
+                <p className="whitespace-pre-wrap">{message.content}</p>
+              </div>
+            </div>
+          ))}
+          
+          {isTyping && (
+            <div className="flex justify-start">
+              <div className="bg-white/20 backdrop-blur-lg text-white border border-white/20 rounded-2xl px-4 py-3">
+                <div className="flex gap-1">
+                  <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                  <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                  <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                </div>
+              </div>
+            </div>
+          )}
+          
+          <div ref={messagesEndRef} />
+        </div>
+
+        {/* Input */}
+        <div className="p-4 bg-white/5 backdrop-blur-lg border-t border-white/20">
+          <div className="flex gap-2">
+            <textarea
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Escribe lo que sientes, piensas o necesitas..."
+              className="flex-1 bg-white/10 backdrop-blur-lg text-white placeholder-purple-300 rounded-2xl px-4 py-3 border border-white/20 focus:outline-none focus:ring-2 focus:ring-purple-400 resize-none"
+              rows="2"
+            />
+            <button
+              onClick={handleSend}
+              disabled={!input.trim()}
+              className="bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-2xl px-6 py-3 hover:from-purple-600 hover:to-pink-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center"
+            >
+              <Send className="w-5 h-5" />
+            </button>
+          </div>
+          <p className="text-purple-300 text-xs mt-2 text-center">
+            Presiona Enter para enviar • Shift + Enter para nueva línea
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
