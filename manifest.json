@@ -1,0 +1,31 @@
+{
+  "name": "Aura - Tu Compañera Personal",
+  "short_name": "Aura",
+  "description": "Tu mejor amiga, psicóloga, profesora y programadora personal",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#581c87",
+  "theme_color": "#7c3aed",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/static/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/static/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/static/screenshot.png",
+      "sizes": "540x720",
+      "type": "image/png"
+    }
+  ]
+}
